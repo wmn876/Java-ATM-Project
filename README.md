@@ -1,3 +1,5 @@
 # Java-ATM-Project
-Ashar Haque
-William Nguma
+### Collaborators list 
+Ashar Haque </br>
+William Nguma </br>
+Mike Dorin
