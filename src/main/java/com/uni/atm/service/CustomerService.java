@@ -44,6 +44,7 @@ public class CustomerService {
         Account savingAccount = new Account().accountNo(Utils.generateAccountNumber()).accountType(AccountType.SAVING).customer(customer).balance(customerRequest.getInitialBalance());
         accountRepo.save(savingAccount);
 
+
         Pair<String, String> cardNumberAndPin = Utils.generateCardNumberWithPin();
         Card debitCard = new Card().cardType(CardType.DEBT).cardNo(cardNumberAndPin.getLeft()).issueDate(LocalDate.now()).expireDate(LocalDate.now().plusYears(cardExpireYears)).pin(cardNumberAndPin.getRight()).customer(customer);
         cardRepo.save(debitCard);

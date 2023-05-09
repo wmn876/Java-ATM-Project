@@ -60,7 +60,7 @@ public class CardService {
 
     @Transactional
     private BigDecimal handleDeposit(Card card, TransactionRequest transactionRequest) {
-        if (null == transactionRequest.getAmount() || transactionRequest.getAmount().equals(BigDecimal.ZERO))
+        if (null == transactionRequest.getAmount() || transactionRequest.getAmount().setScale(0).equals(BigDecimal.ZERO))
             throw new InvalidRequestException("For Deposit: Amount Can't be empty");
         Account account = card.account();
         synchronized (this) {
@@ -74,7 +74,7 @@ public class CardService {
 
     @Transactional
     private BigDecimal handleWithDraw(Card card, TransactionRequest transactionRequest) {
-        if (null == transactionRequest.getAmount() || transactionRequest.getAmount().equals(BigDecimal.ZERO))
+        if (null == transactionRequest.getAmount() || transactionRequest.getAmount().setScale(0).equals(BigDecimal.ZERO))
             throw new InvalidRequestException("For Withdraw: Amount Can't be empty");
         Account account = card.account();
         synchronized (this) {

@@ -1,0 +1,38 @@
+@startuml
+!theme cerulean-outline
+
+Actor -> CustomerController : transaction
+AtmApplication --> CustomerService : onboardCustomer
+CustomerService -> CustomerRepo : save
+CustomerService -> AccountRepo : save
+CustomerService -> CardRepo : save
+CustomerService --> AtmApplication : log the customer info
+
+
+opt
+    CustomerController -> CustomerService : performTransaction
+    CustomerService -> CustomerService : validateCard
+    alt Valid Card
+        alt BALANCE_INQUIRY
+            CustomerService -> CardRepo : findByCardNo : Card -> Account -> Balance
+            CardRepo --> CustomerService : Card : Account : Balance
+
+        else WITHDRAW
+            CustomerService -> AccountRepo : Check for insufficient balance : Update Balance
+            CardRepo --> CustomerService : Card : Account : Balance
+
+        else DEPOSIT
+            CustomerService -> AccountRepo : Update Balance
+            CardRepo --> CustomerService : Card : Account : Balance
+
+        end
+    else Invalid Card
+        CustomerService --> ControllerAdvice
+
+end
+CustomerService --> CustomerController : Balance
+CustomerController --> Actor : Balance
+
+
+
+@enduml

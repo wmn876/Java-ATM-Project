@@ -1,0 +1,97 @@
+@startuml
+
+class AtmApplication {
+- customerService
++ main()
++ run()
+}
+
+class CustomerController {
+ - customerService
+ - cardService
+ + onBoardCustomer()
+ + validateCustomer()
+ + transaction()
+}
+
+class CustomerService {
+- accountRepo
+- customerRepo
+- cardRepo
+- cardExpireYears
++ onBoardCustomer()
+}
+
+class CardService {
+- cardRepo
+- accountRepo
++ fetchCardByCardNo()
++ validateCard()
++ performTransaction()
+- handleBalanceInquiry()
+- handleDeposit()
+- handleWithDraw()
+}
+
+class AccountRepo {
+}
+
+class CustomerRepo {
+}
+
+class CardRepo {
+}
+
+package domain {
+    class Account {
+           - Long id
+           - String accountNo
+           - BigDecimal balance
+           - AccountType accountType
+           - @OneToOne Card card
+           - @ManyToOne Customer customer
+    }
+
+    class Card {
+        - Long id
+        - String cardNo
+        - CardType cardType
+        - LocalDate issueDate
+        - LocalDate expireDate
+        - String pin
+        - @ManyToOne Customer customer
+        - @OneToOne Account account
+    }
+
+    class Customer {
+          - Long id
+          - String firstName
+          - String lastName
+          - @OneToMany List<Card> cards
+          - @OneToMany List<Account> accounts
+    }
+}
+
+enum TransactionType {
+    WITHDRAW
+    DEPOSIT
+    BALANCE_INQUIRY
+}
+
+enum CardType {
+    CREDIT
+    DEBT
+}
+
+AtmApplication  o--  CustomerService
+CustomerService -right--o CustomerController
+CustomerController o-- CardService
+
+CustomerService o-- AccountRepo
+CustomerService o-- CustomerRepo
+CustomerService o-- CardRepo
+
+CardService o-- AccountRepo
+CardService o-- CardRepo
+
+@enduml
